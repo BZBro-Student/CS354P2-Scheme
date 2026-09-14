@@ -30,17 +30,36 @@
         ;when a value is duplicated 0 times the result is an empty list
         '()
         ;recursive case occurs when count > 0
-        (cons variable (variable-duper variable (- count 1)))))
+        (cons 
+        variable 
+        (variable-duper variable (- count 1)))
+    ))
+
+;variable duper returns a list so we need to combine lists instead of making a list of lists using con
+(define (duper-merger list1 list2)
+    (if (null? list1)
+        list2
+        (if (null? list2)
+        list1
+        (cons 
+        (car list1)
+        (duper-merger (cdr list1) list2)) ;merges list one into list two 
+    )))
 
 (define (super-duper source count)
     ;if the source is an atom we instantly return that value
     (if (atom? source)
         source
         ;base case is an empty list
-        (if (or (null? source))
+        (if (null? source)
             ;an empty list is an empty list
             '()
             ;recursive case occurs when source is not empty
-            (cons (variable-duper (car source) (count)) (super-duper (cdr source) count )))))
+            (duper-merger ;merges the end result of the next two functions
+            (variable-duper (super-duper (car source) count) count) ;duplicates the value inside the car of the source 
+                                                                    ;super duper is called to do recursive copy of any lists handed to the function
+                                                                    ;if you just hand (car source) it will not do a deep copy (ask me how I know lol)
+            (super-duper (cdr source) count ));recursively calls super-duper on the rest of the list 
+        )))
 
 
