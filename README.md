@@ -40,7 +40,7 @@ guile -l super-duper.scm
 
 then
 
-(display (super-duper <list> <count>))
+(display (super-duper list count))
 
 To run the test you would instead do:
 
